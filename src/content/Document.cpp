@@ -1,6 +1,6 @@
 #include "Document.h"
 
-Document::Document(const std::string& str_DocPath,bool b_SplitToSentence,bool b_LeakDoc)
+Document::Document(const std::string& str_DocPath,bool b_SplitToSentence)
 {
     //ctor
     this->m_DocID = str_DocPath;
@@ -29,9 +29,6 @@ Document::Document(const std::string& str_DocPath,bool b_SplitToSentence,bool b_
         {
             std::cout<<"read file "<<this->m_strDocPath<<" error"<<std::endl;
             exit(ERROR_OPENFILE);
-        }
-        if(b_LeakDoc)//是带查询的泄露文档时，将句子分成KGRAM
-        {
         }
     }
 }
@@ -179,6 +176,37 @@ void Document::CalcDocSimHash()
 }
 
 /**
+    将句子分成词语块，便于小粒度查找泄露文档
+*/
+void Document::SplitSentencesToKGrams()
+{
+    for(int i=0; i<this->m_vecParagraph.size(); i++)
+    {
+        Paragraph& para = this->m_vecParagraph[i];
+        for(int j=0; j<para.vec_Sentences.size(); j++)
+        {
+            Sentence& sen = para.vec_Sentences[j];
+            if(sen.vec_splitedHits.size()<KGRAM)//如果分词数少于阈值，则不作为一个特征项
+            {
+                return;
+            }
+            //遍历分词列表
+            for(int m=0; m < sen.vec_splitedHits.size() - KGRAM + 1; m++)
+            {
+                KGram kgram;
+                for(int n=m; n < m + KGRAM; n++)
+                {
+                    kgram.vec_splitedHits.push_back(sen.vec_splitedHits[n]);
+                }
+                kgram.textRange.offset = kgram.vec_splitedHits[0].textRange.offset;
+                kgram.textRange.length = kgram.vec_splitedHits[KGRAM-1].textRange.offset +kgram.vec_splitedHits[KGRAM-1].textRange.length;
+                sen.vec_KGram.push_back(kgram);
+            }
+        }
+    }
+}
+
+/**
     构造倒排索引
 */
 void Document::BuildInvertedIndex()
@@ -233,6 +261,17 @@ void Document::Display() const
                 //std::cout<<sh.word<<"/"<<sh.pos<<"\t";
             }
             std::cout<<std::endl<<std::endl;
+            for(int k=0; k<sen.vec_KGram.size(); k++)
+            {
+                KGram kgram = sen.vec_KGram[k];
+                std::cout<<kgram.textRange.offset<<","<<kgram.textRange.offset + kgram.textRange.length<<"\t"<<std::endl;
+                for(int x=0;x < KGRAM; x++)
+                {
+                    SplitedHits sh = kgram.vec_splitedHits[x];
+                    std::cout<<sh.word<<"\t";
+                }
+                std::cout<<std::endl;
+            }
         }
     }
     /*查看倒排索引信息

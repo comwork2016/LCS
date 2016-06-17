@@ -75,6 +75,7 @@ struct Sentence
     TextRange textRange; //段落范围
     int firstWordNo;//第一个词语是文章中的第几个词
     std::vector<SplitedHits> vec_splitedHits; //段落包含的分词信息
+    std::vector<KGram> vec_KGram;//句子中的词语块
 };
 
 //定义结构体，存储段落信息

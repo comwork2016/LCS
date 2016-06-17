@@ -19,7 +19,7 @@
 class Document
 {
     public:
-        Document(const std::string& str_DocPath,bool b_SplitToSentence = false,bool b_LeakDoc=false);
+        Document(const std::string& str_DocPath,bool b_SplitToSentence = false);
         virtual ~Document();
 
         DOC_ID GetDocID() const { return m_DocID; }
@@ -42,6 +42,7 @@ class Document
         std::map<std::string, WordIndex*> GetMapWordIndex() const { return m_mapWordIndex; }
 
         void CalcDocSimHash();
+        void SplitSentencesToKGrams();
         void BuildInvertedIndex();
         void Display() const;
 
