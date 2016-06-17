@@ -6,7 +6,7 @@
 
 #include "WordSimilarity.h"
 #include "NLPIR.h"
-#include "ReadCorpus.h"
+#include "NLPIRUtil.h"
 #include "GlossaryDao.h"
 
 class SentenceSimilarity
@@ -15,12 +15,13 @@ class SentenceSimilarity
         SentenceSimilarity();
         virtual ~SentenceSimilarity();
 
-        static double CalcSentenceSimilarity(const std::string str_Sen1,const std::string str_Sen2);
+        double CalcSentenceSimilarity(const std::string str_Sen1,const std::string str_Sen2);
 
     protected:
-        static void SplitSentenceToVectors(const std::string& str,std::vector<std::string>& vec_Word,std::vector<std::string>& vec_NWord,std::vector<std::string>& vec_VWord,std::vector<std::string>& vec_AWord,std::vector<std::string>& vec_MWord,std::vector<std::string>& vec_QWord,std::vector<std::string>& vec_TWord);
-        static double CalcVectorSimilarity(std::vector<std::string>& vec1,std::vector<std::string>& vec2,std::map<std::string,std::vector<std::string> > map_WordConceptsVector);
+        void DivideWordsByPOS(const std::vector<SplitedHits>& vec_Word,std::vector<std::string>& vec_NWord,std::vector<std::string>& vec_VWord,std::vector<std::string>& vec_AWord,std::vector<std::string>& vec_MWord,std::vector<std::string>& vec_QWord,std::vector<std::string>& vec_TWord);
+        double CalcVectorSimilarity(std::vector<std::string>& vec1,std::vector<std::string>& vec2,std::map<std::string,std::vector<std::string> > map_WordConceptsVector);
     private:
+        GlossaryDao* glossaryDao;
 };
 
 #endif // SENTENCESIMILARITY_H

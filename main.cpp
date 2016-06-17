@@ -28,7 +28,7 @@ int main()
 
     //DocumentOperation::AddDocument("./in/utf_23.txt");
     std::string str_InputDir = "./in/";
-    DocumentOperation::AddDirectoryDocuments(str_InputDir);
+    //DocumentOperation::AddDirectoryDocuments(str_InputDir);
 
     //查询数据泄露
     std::string str_LeakDoc = "./test/leak.txt";
@@ -37,12 +37,16 @@ int main()
     //Document* doc = new Document("./in/utf_742.txt",true);
     //doc->Display();
 
-    /*std::string str1 = "“龙眼”无人机是由美国海军陆战队士兵在阿富汗地区发射";
-    std::string str2 = "海军陆战队战士在阿富汗山区发射“龙眼”无人机";
+    /*
+    SentenceSimilarity* ss = new SentenceSimilarity();
+    std::string str11 = "“龙眼”无人机是由美国海军陆战队士兵在阿富汗地区发射";
+    std::string str12 = "海军陆战队战士在阿富汗山区发射“龙眼”无人机";
+    std::cout<<ss->CalcSentenceSimilarity(str11,str12)<<std::endl;
     //相似度为0.48
-    std::string str1 = "他们结合海军某快反支队海上训练的保障任务";
-    std::string str2 = "训练由静态训练向动态训练转变，由室内训练向室外训练";
-    std::cout<<SentenceSimilarity::CalcSentenceSimilarity(str1,str2)<<std::endl;*/
+    std::string str21 = "他们结合海军某快反支队海上训练的保障任务";
+    std::string str22 = "训练由静态训练向动态训练转变，由室内训练向室外训练";
+    std::cout<<ss->CalcSentenceSimilarity(str21,str22)<<std::endl;
+    delete ss;*/
 
     gettimeofday(&finish,NULL);
     duration = 1000000 * (finish.tv_sec - start.tv_sec) + finish.tv_usec - start.tv_usec;

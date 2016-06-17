@@ -247,7 +247,7 @@ std::string DocumentDao::QuerySIMSimilarity(const Document* doc)
 //std::vector<FingerPrintsSimilarDocument> DocumentDao::GetSentenceSimilarDocument(doc)
 void DocumentDao::GetSentenceSimilarDocument(const Document* doc)
 {
-    //对每句话，查询句子范围内相同词语超过20%的句子
+    //对每句话，查询句子范围内相同词语超过50%的句子
     for(int i=0; i<doc->GetvecParagraph().size(); i++)
     {
         Paragraph para = doc->GetvecParagraph()[i];
@@ -315,6 +315,7 @@ void DocumentDao::GetSentenceSimilarDocument(const Document* doc)
                 }
             }
             //挑选出现次数大于阈值的短语范围
+            SentenceSimilarity* ss = new SentenceSimilarity();
             for(std::map<DOC_ID,std::vector<DOCRANGETIMES> >::iterator it = map_DocRangeVector.begin(); it != map_DocRangeVector.end(); it++)
             {
                 DOC_ID docID = it->first;
@@ -338,7 +339,7 @@ void DocumentDao::GetSentenceSimilarDocument(const Document* doc)
                             docDB->Display();
                         }*/
                         std::string str_Similar = docDB->GetstrContents().substr(begin,end-begin);
-                        double d_sim = SentenceSimilarity::CalcSentenceSimilarity(str_Search,str_Similar);
+                        double d_sim = ss->CalcSentenceSimilarity(str_Search,str_Similar);
                         //std::cout<<str_Similar<<std::endl;
                         //std::cout<<"similarity is "<<d_sim<<std::endl<<std::endl;
                         if(d_sim > SIMGATE)
@@ -350,6 +351,7 @@ void DocumentDao::GetSentenceSimilarDocument(const Document* doc)
                     }
                 }
             }
+            delete ss;
             /*
             //计算含有相同句子的相似度
             for(int k=0; k<vec_DocSen.size(); k++)
