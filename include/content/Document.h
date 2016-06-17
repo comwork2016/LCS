@@ -19,6 +19,7 @@
 class Document
 {
     public:
+        Document(const std::string& str_DocPath,TextRange range);
         Document(const std::string& str_DocPath,bool b_SplitToSentence = false);
         virtual ~Document();
 

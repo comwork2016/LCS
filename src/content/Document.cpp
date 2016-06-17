@@ -1,5 +1,32 @@
 #include "Document.h"
 
+/**
+    只读取文件中的一段内容
+*/
+Document::Document(const std::string& str_DocPath,TextRange range)
+{
+    this->m_DocID = str_DocPath;
+    this->m_strDocPath = str_DocPath;
+    int n_SeparatorIndex = str_DocPath.find_last_of("/");
+    this->m_strDocName = str_DocPath.substr(n_SeparatorIndex+1);
+    this->m_strContents = "";
+    this->m_lSimHash = 0;
+    this->m_nWordCount = 0;
+    std::ifstream ifs_Doc;
+    ifs_Doc.open((char *)this->m_strDocPath.c_str(),std::ios_base::in);
+    if(!ifs_Doc.is_open())
+    {
+        std::cout<<"read file "<<this->m_strDocPath<<" error"<<std::endl;
+        exit(ERROR_OPENFILE);
+    }
+    char* buf = new char[range.length+1];
+    ifs_Doc.seekg(range.offset,std::ios_base::beg);
+    ifs_Doc.read(buf,range.length);
+    buf[range.length] = '\0';
+    this->m_strContents = buf;
+    delete[] buf;
+}
+
 Document::Document(const std::string& str_DocPath,bool b_SplitToSentence)
 {
     //ctor
@@ -265,7 +292,7 @@ void Document::Display() const
             {
                 KGram kgram = sen.vec_KGram[k];
                 std::cout<<kgram.textRange.offset<<","<<kgram.textRange.offset + kgram.textRange.length<<"\t"<<std::endl;
-                for(int x=0;x < KGRAM; x++)
+                for(int x=0; x < KGRAM; x++)
                 {
                     SplitedHits sh = kgram.vec_splitedHits[x];
                     std::cout<<sh.word<<"\t";
