@@ -113,38 +113,27 @@ int DocumentDao::InsertIndexes(std::map<std::string,WordIndex*> map_WordIndex)
 */
 int DocumentDao::InsertDocument(Document* doc)
 {
-    const std::string str_SimilarDoc = QuerySIMSimilarity(doc);
-    if(str_SimilarDoc!="")
-    {
-        std::cout<<"DUPLICATE DOC TO INSERT: "<<doc->GetstrDocName()<<" is similar to "<<str_SimilarDoc<<std::endl;
-        return 1;
-    }
-    else
-    {
-        doc->BuildInvertedIndex();
-        InsertIndexes(doc->GetMapWordIndex());
-        mongo::BSONObjBuilder b;
-        //保存文档信息
-        b.append("docid", doc->GetDocID());
-        b.append("filename",doc->GetstrDocName());
-        b.append("filepath", doc->GetstrDocPath());
-        const char* pch_Contents= doc->GetstrContents().c_str();
-        b.append("filelength",static_cast<int>(StringUtil::ConvertCharArraytoWString(pch_Contents).length()));
-        b.appendNumber("docsimhash",static_cast<long long>(doc->GetlSimHash()));
-        b.appendNumber("docsimhash1",static_cast<long long>(doc->GetlSimHash16_1()));
-        b.appendNumber("docsimhash2",static_cast<long long>(doc->GetlSimHash16_2()));
-        b.appendNumber("docsimhash3",static_cast<long long>(doc->GetlSimHash16_3()));
-        b.appendNumber("docsimhash4",static_cast<long long>(doc->GetlSimHash16_4()));
-        this->m_Conn.insert(this->m_DocDBName,b.obj());
-        std::cout<<doc->GetstrDocName() <<" inserted"<<std::endl;
-    }
+    mongo::BSONObjBuilder b;
+    //保存文档信息
+    b.append("docid", doc->GetDocID());
+    b.append("filename",doc->GetstrDocName());
+    b.append("filepath", doc->GetstrDocPath());
+    const char* pch_Contents= doc->GetstrContents().c_str();
+    b.append("filelength",static_cast<int>(StringUtil::ConvertCharArraytoWString(pch_Contents).length()));
+    b.appendNumber("docsimhash",static_cast<long long>(doc->GetlSimHash()));
+    b.appendNumber("docsimhash1",static_cast<long long>(doc->GetlSimHash16_1()));
+    b.appendNumber("docsimhash2",static_cast<long long>(doc->GetlSimHash16_2()));
+    b.appendNumber("docsimhash3",static_cast<long long>(doc->GetlSimHash16_3()));
+    b.appendNumber("docsimhash4",static_cast<long long>(doc->GetlSimHash16_4()));
+    this->m_Conn.insert(this->m_DocDBName,b.obj());
+    std::cout<<doc->GetstrDocName() <<" inserted"<<std::endl;
     return 0;
 }
 
 /**
     插入一个文档集合到数据库中
 */
-int DocumentDao::InsertDocumentVector(std::vector<Document*> vec_doc)
+int DocumentDao::InsertDocuments(std::vector<Document*> vec_doc)
 {
     for(int i=0; i<vec_doc.size(); i++)
     {
@@ -153,7 +142,7 @@ int DocumentDao::InsertDocumentVector(std::vector<Document*> vec_doc)
         if(str_SimilarDoc=="")
         {
             doc->BuildInvertedIndex();
-            //InsertDocument(doc);
+            InsertDocument(doc);
             std::cout<<doc->GetstrDocName() <<" inserted"<<std::endl;
         }
         else

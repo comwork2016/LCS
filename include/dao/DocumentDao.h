@@ -14,8 +14,7 @@ class DocumentDao
         DocumentDao();
         virtual ~DocumentDao();
 
-        int InsertDocument(Document* doc);
-        int InsertDocumentVector(std::vector<Document*> vec_doc);
+        int InsertDocuments(std::vector<Document*> vec_doc);
         int DeleteAll();
         std::string QuerySIMSimilarity(const Document* doc);
         void GetSentenceSimilarDocument(const Document* doc);
@@ -24,6 +23,7 @@ class DocumentDao
         std::map<DOC_ID,WordIndexRecord*> QueryIndexOfWord(const std::string& str_Word);
         bool isWordIndexExists(const std::string& str_Word);
         int InsertIndexes(std::map<std::string,WordIndex*> map_WordIndex);
+        int InsertDocument(Document* doc);
     private:
         mongo::DBClientConnection m_Conn;
         std::string m_Host;

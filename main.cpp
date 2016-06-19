@@ -21,6 +21,12 @@ int main()
     double duration;
     gettimeofday(&start,NULL);
 
+    /*//将词语义项存入数据库中
+    GlossaryDao* glossaryDao = new GlossaryDao();
+    std::string str_GlossaryPath="./dat/glossary.dat";
+    glossaryDao->ReadGlossaryToDB(str_GlossaryPath);
+    delete glossaryDao;*/
+
     //读取语料库中的词频信息
     //ReadCorpus::ReadCorpusTF("./Corpus/Corpus.csv");
     ReadCorpus::ReadStopTerm("./Corpus/StopTerm.txt");
@@ -28,7 +34,7 @@ int main()
 
     //DocumentOperation::AddDocument("./in/utf_23.txt");
     std::string str_InputDir = "./in/";
-    //DocumentOperation::AddDirectoryDocuments(str_InputDir);
+    DocumentOperation::AddDirectoryDocuments(str_InputDir);
 
     //查询数据泄露
     std::string str_LeakDoc = "./test/leak.txt";

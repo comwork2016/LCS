@@ -18,7 +18,9 @@ int DocumentOperation::AddDocument(const std::string& str_DocPath)
     //计算hash值
     doc->CalcDocSimHash();
     DocumentDao* docDao = new DocumentDao();
-    docDao->InsertDocument(doc);
+    std::vector<Document*> vec_Doc;
+    vec_Doc.push_back(doc);
+    docDao->InsertDocuments(vec_Doc);
     delete docDao;
     delete doc;
 }
@@ -60,7 +62,7 @@ int DocumentOperation::AddDirectoryDocuments(const std::string& str_InputDir)
         {
             num=0;
             //将文档集合添加到数据库中
-            docDao->InsertDocumentVector(vec_Documents);
+            docDao->InsertDocuments(vec_Documents);
             //释放所有文档资源
             for(int i=0; i<vec_Documents.size(); i++)
             {
@@ -71,7 +73,7 @@ int DocumentOperation::AddDirectoryDocuments(const std::string& str_InputDir)
         }
     }
     //将文档集合添加到数据库中
-    docDao->InsertDocumentVector(vec_Documents);
+    docDao->InsertDocuments(vec_Documents);
     //释放所有文档资源
     for(int i=0; i<vec_Documents.size(); i++)
     {
