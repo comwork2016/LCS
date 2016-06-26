@@ -4,7 +4,7 @@ GlossaryDao::GlossaryDao()
 {
     //ctor
     this->m_Host = "localhost:27017";
-    this->m_DBName = "FP.glossary";
+    this->m_DBName = "LCS.glossary";
     this->m_Conn.connect(this->m_Host);
 }
 

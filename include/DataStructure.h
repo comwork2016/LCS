@@ -14,7 +14,9 @@ struct Range
     int end;
 };
 
-typedef std::pair<Range,int> DOCRANGETIMES;//存储文档中词语的位置范围信息
+typedef std::pair<Range,int> PAIRDOCRANGETIMES;//存储文档中词语的位置范围信息
+typedef std::pair<int,int> PAIRSIMWORDNO;//两个句子中对应的相似的词语编号
+typedef std::pair<Range,Range> PAIRSENRANGE;
 
 const int HAMMINGDIST = 3;
 const int SIMHASHBITS = 64;

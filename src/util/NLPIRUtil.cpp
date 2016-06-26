@@ -46,30 +46,6 @@ std::vector<SplitedHits> NLPIRUtil::SplitStringToWords(std::string str,int n_Fir
     return vec_Result;
 }
 
-/**
-    将文档中的句子分词
-*/
-void NLPIRUtil::SplitDocument(Document* doc)
-{
-    std::string str_Contents = doc->GetstrContents();
-    std::vector<Paragraph> vec_Paragraph;
-    for(int i=0; i<doc->GetvecParagraph().size(); i++)
-    {
-        Paragraph para = doc->GetvecParagraph()[i];
-        //对句子进行分词处理
-        for(int j = 0; j<para.vec_Sentences.size(); j++)
-        {
-            Sentence& sen = para.vec_Sentences[j];
-            std::string str = str_Contents.substr(sen.textRange.offset,sen.textRange.length);
-            int n_WordCount = doc->GetnWordCount();
-            sen.vec_splitedHits = SplitStringToWords(str,n_WordCount,sen.textRange.offset);
-            doc->SetnWordCount(n_WordCount + sen.vec_splitedHits.size());
-        }
-        vec_Paragraph.push_back(para);
-    }
-    doc->SetvecParagraph(vec_Paragraph);
-}
-
 NLPIRUtil::~NLPIRUtil()
 {
     NLPIR_Exit();

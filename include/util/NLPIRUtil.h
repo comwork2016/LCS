@@ -6,7 +6,6 @@
 #include "StringUtil.h"
 
 #include "NLPIR.h"
-#include "Document.h"
 
 class NLPIRUtil
 {
@@ -14,7 +13,6 @@ class NLPIRUtil
         NLPIRUtil();
         virtual ~NLPIRUtil();
         std::vector<SplitedHits> SplitStringToWords(std::string str,int n_FirstWordNo = 0,int n_SentencePos=0);
-        void SplitDocument(Document* doc);
     protected:
     private:
 };

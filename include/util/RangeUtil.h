@@ -10,7 +10,8 @@ class RangeUtil
         RangeUtil();
         virtual ~RangeUtil();
 
-        static void MergeRangeToVector(std::vector<DOCRANGETIMES>& vec_DocRangeTimes,DOCRANGETIMES& docRangeTimes);
+        static int MergeRangeToVector(std::vector<PAIRDOCRANGETIMES>& vec_DocRangeTimes,PAIRDOCRANGETIMES& docRangeTimes,int indexBegin = 0);
+        static std::vector<PAIRSENRANGE> MergeRangeInSentence(std::vector<PAIRSIMWORDNO>& vec_SimWordNo);
 
     protected:
     private:
